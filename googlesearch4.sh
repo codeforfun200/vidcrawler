@@ -319,15 +319,15 @@ vystup_titulky="subtitle_sites.txt"
 scraper_file="for_scraper.txt"
 google_links_file="google_links.txt"
 
-rm $vystup_forum
-rm $vystup_download_lnks
-rm $vystup_youtube
-rm $vystup_player
-rm $vystup_torrent
-rm $vystup_paysite
-rm $vystup_multiple
-rm $vystup_titulky
-rm $scraper_file
+rm $vystup_forum 2>/dev/null
+rm $vystup_download_lnks 2>/dev/null
+rm $vystup_youtube 2>/dev/null
+rm $vystup_player 2>/dev/null
+rm $vystup_torrent 2>/dev/null
+rm $vystup_paysite 2>/dev/null
+rm $vystup_multiple 2>/dev/null
+rm $vystup_titulky 2>/dev/null
+rm $scraper_file 2>/dev/null
 
 url_to_go_cnt=0
 domain="www.google.com"
@@ -336,14 +336,15 @@ url_to_load=$1
 pruchod=1
 nalezl=0
 
+echo -ne "Getting urls from google\r"
 while [ $nalezl -eq 0 ]
 do
 
- curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$url_to_load"
+ curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$url_to_load" 
 
 if [ $? -ne 0 ]
       then
-        echo "curl neuspel - pripojeni ke googlu selhalo"
+        echo "curl failed - connection to google failed"
         break
 fi    
 
@@ -351,20 +352,23 @@ fi
 
 
 #hledame odkazy z google search
-rm $google_links_file
-cat $vstupni_file | awk -f google_parser.awk
+rm $google_links_file 2>/dev/null
+cat $vstupni_file | awk -f google_parser.awk > /dev/null 2>/dev/null
 
 nalezl=1 #false
 #pridat test na existenci google links file
-while read google_link
-  do
-    nalezl=0
-    add_url_to_go "$google_link"
-done < $google_links_file
+if [ -e $google_links_file ]
+  then
+    while read google_link
+      do
+        nalezl=0
+        add_url_to_go "$google_link"
+    done < $google_links_file
+fi    
 
 pom_param=$(($pruchod*10))
 url_to_load="$1&start=$pom_param"
-echo "url to load je $url_to_load"
+#echo "url to load je $url_to_load"
 ((pruchod++))
 
 
@@ -398,7 +402,8 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
     #pom_url_str=${url_to_go[$pom_url_cnt]}
     #pom_url_str=${pom_url_str%\"}
     #url_to_go[$pom_url_cnt]=$pom_url_str
-    echo "zpracovava se ${url_to_go[$pom_url_cnt]}"
+    domain=$(sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' <<< "${url_to_go[$pom_url_cnt]}") #reseni ze stack overflow
+    echo -ne "Checking $domain                                \r"  #${url_to_go[$pom_url_cnt]}\r"
     
     #zacatek kontroly whitelistu
     
@@ -415,7 +420,7 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
     done
     if [ $nalezen -eq 0 ]
       then
-        echo "nalezen ve whitelistu"
+        #echo "nalezen ve whitelistu"
         
         ((pom_url_cnt++))
         continue
@@ -427,7 +432,7 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
     
     if [[ ${url_to_go[$pom_url_cnt]} = *torrent* ]]
          then
-            echo "torrent site nalezena"
+            #echo "torrent site nalezena"
             echo ${url_to_go[$pom_url_cnt]} >> $vystup_torrent
             ((pom_url_cnt++))
             continue
@@ -452,36 +457,36 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
     
       if [ $je_video_soubor -eq 0 ]
         then
-          echo "zamezeno stazeni jineho nez html souboru" 
+          #echo "zamezeno stazeni jineho nez html souboru" 
           ((pom_url_cnt++))
           continue
       fi  
     fi
     #konec detekce stazeni binarniho souboru
     
-    domain=$(sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' <<< "${url_to_go[$pom_url_cnt]}") #reseni ze stack overflow
     
-    hlavicka=$(curl -m 120 -I -L -c "cookies.txt" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "${url_to_go[$pom_url_cnt]}")
+    
+    hlavicka=$(curl -s -m 120 -I -L -c "cookies.txt" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "${url_to_go[$pom_url_cnt]}")
     
     if [ $? -ne 0 ]
       then
-        echo "curl neuspel"
+        echo "curl failed                   "
         ((pom_url_cnt++))
         continue
     fi    
     
     if [[ ! $hlavicka = *text/html* ]]
       then
-        echo "dokument je jineho typu nez text/html"
+        #echo "dokument je jineho typu nez text/html"
         ((pom_url_cnt++))
         continue
     fi  
     
-    curl -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "${url_to_go[$pom_url_cnt]}"
+    curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "${url_to_go[$pom_url_cnt]}" 
 
     if [ $? -ne 0 ]
       then
-        echo "curl neuspel"
+        echo "curl failed               "
         ((pom_url_cnt++))
         continue
     fi    
@@ -490,14 +495,14 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
     
     if [[ ! $typ_soub = *text/html*  ]]
       then
-        echo "typ souboru neni text/html"
+        #echo "typ souboru neni text/html"
         ((pom_url_cnt++))
         continue
     fi  
     
     
     
-    cat "$vstupni_file" | iconv -f utf-8 -t ascii//TRANSLIT | awk -v "domain=$domain" -v "hledany_str=$2" -v "url=${url_to_go[$pom_url_cnt]}" -f site_assigner.awk 
+    cat "$vstupni_file" | iconv -f utf-8 -t ascii//TRANSLIT | awk -v "domain=$domain" -v "hledany_str=$2" -v "url=${url_to_go[$pom_url_cnt]}" -f site_assigner.awk >/dev/null 2>/dev/null
     
     #awk skript muze zapsat nove url do souboru scraper file
     if [ -e $scraper_file ]

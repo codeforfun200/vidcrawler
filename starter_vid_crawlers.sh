@@ -85,49 +85,56 @@ webshare_url="https://webshare.cz/#/search?what="
 
 sdilej_url="https://sdilej.cz/"
 url_for_sdilej="$sdilej_url$title_fastshare/s"
-echo "$url_for_gsearch"
-echo $url_for_ulozto
-rm "download_lnks.txt"
+#echo "$url_for_gsearch"
+#echo $url_for_ulozto
+rm "download_lnks.txt" 2>/dev/null
 
-
-./ulozto.sh "$url_for_ulozto"
+echo -ne "Checking uloz.to\r"
+./ulozto.sh "$url_for_ulozto" >/dev/null
 
 title_ascii=$(echo "$1" | iconv -f utf-8 -t ascii//TRANSLIT )
 actor_ascii=$(echo "$2" | iconv -f utf-8 -t ascii//TRANSLIT )
 
-./vidcrawler13.sh "$url_for_pornfile" "$title_ascii" 4 #> /dev/null
+echo -ne "Checking pornfile.cz        \r"
+./vidcrawler13.sh "$url_for_pornfile" "$title_ascii" 4 > /dev/null
 
 
+echo -ne "Checking datoid.cz          \r"
+./vidcrawler13.sh "$url_for_datoid" "$title_ascii" 4 > /dev/null
 
-./vidcrawler13.sh "$url_for_datoid" "$title_ascii" 4 #> /dev/null
+echo -ne "Checking webshare.cz        \r"
+./vidcrawler13.sh "$webshare_url" "$title_ascii $actor_ascii" 4 > /dev/null
 
-./vidcrawler13.sh "$webshare_url" "$title_ascii $actor_ascii" 4 #> /dev/null
+echo -ne "Checking sdilej.cz        \r"
+./vidcrawler13.sh "$url_for_sdilej" "$title_ascii" 4 > /dev/null
 
-./vidcrawler13.sh "$url_for_sdilej" "$title_ascii" 4 #> /dev/null
+echo -ne "Checking fastshare.cz        \r"
+./vidcrawler13.sh "$url_for_fastshare" "$title_ascii" 4 > /dev/null
 
-./vidcrawler13.sh "$url_for_fastshare" "$title_ascii" 4 #> /dev/null
-
-./googlesearch4.sh "$url_for_gsearch" "$title_ascii" #> /dev/null
-
+echo -ne "Getting urls from google        \r"
+./googlesearch4.sh "$url_for_gsearch" "$title_ascii" 
 
 
+if [ -e for_analyzer.txt ]
+then
 while read url
   do
-    echo "spoustim vidcrawler s url $url"
+    
     domain=$(sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' <<< "$url") #reseni ze stack overflow
-    wget  -O "$vstupni_file" "$url"
+    echo -ne "Analyzing $domain              \r"
+    wget -nv -q --timeout=120 -O "$vstupni_file" "$url"
     if [ $? -ne 0 ]
      then
-       curl -o "$vstupni_file" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "$url"
+       curl -s -m 120 -o "$vstupni_file" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "$url"
        if [ $? -ne 0 ]
          then
            echo "Stranku se nepovedlo nacist"         
            continue
        fi  
     fi   
-    cat azlea.html | awk -v "url=$url" -v "hledany_str=$title_ascii" -v "limit=4" -v "domain=$domain" -f dlink_analyzer.awk > /dev/null
+    cat azlea.html | awk -v "url=$url" -v "hledany_str=$title_ascii" -v "limit=4" -v "domain=$domain" -f dlink_analyzer.awk > /dev/null 2>/dev/null
 done < <(cat "for_analyzer.txt")  
-  
+fi  
 
 #echo "Urls for analyzer:"
 #cat "for_analyzer.txt"
@@ -142,6 +149,8 @@ RED='\033[0;31m'
 NC='\033[0m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
+if [ -e download_lnks.txt ]
+then
 while read line
   do
     if [[ $line = "For url"* ]]
@@ -229,33 +238,61 @@ while read line
         
     fi  
 done < <(cat download_lnks.txt | awk '!seen[$0]++')
+else
+  echo "No urls found."
+fi
 echo
 echo
 echo
 echo "Sites with embedded player (online streaming):"
 echo
-cat players.txt
+if [ -e players.txt ]
+  then
+    cat players.txt
+  else
+    echo "No urls found."  
+fi    
 echo
 echo
 echo
 echo "Youtube alternative sites:"
 echo
-cat youtube_alter.txt
+if [ -e youtube_alter.txt ]
+  then
+    cat youtube_alter.txt
+  else
+    echo "No urls found."
+fi  
 echo
 echo
 echo
 echo "Paysites:"
 echo
-cat paysites.txt
+if [ -e paysites.txt ]
+  then
+    cat paysites.txt
+  else
+    echo "No urls found."  
+fi    
 echo
 echo
 echo
 echo "Torrent sites:"
 echo
-cat torrents.txt
+if [ -e torrents.txt ]
+  then
+    cat torrents.txt
+  else
+    echo "No urls found."  
+fi    
 echo
 echo
 echo
 echo "Another sites with potential download links (unsure)"
 echo
-cat multiple_links.txt
+if [ -e multiple_links.txt ]
+  then
+    cat multiple_links.txt
+  else
+    echo "No urls found."  
+fi    

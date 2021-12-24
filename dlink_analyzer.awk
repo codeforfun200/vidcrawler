@@ -371,7 +371,7 @@ VALUE_puv_case=$2
 TAG=tolower(TAG_puv_case)
 VALUE=tolower(VALUE_puv_case)
 
-print "value je "VALUE" tag je "TAG
+#print "value je "VALUE" tag je "TAG
 
 if ( is_in_comment == 1 )
 {  
@@ -420,7 +420,7 @@ if ( is_in_comment == 1 )
 {
         if ( TAG ~ /^!--.*--$/  || TAG ~ /^meta.*/ || TAG ~ /^link.*/ || TAG ~ /^!doctype.*/ || TAG ~ /^br.*/ || TAG ~ /^img.*/ || TAG ~ /^hr.*/ || TAG ~ /^basefont.*/ || TAG ~ /^wbr.*/ || TAG ~ /^hr.*/ || TAG ~ /^area.*/ || TAG ~ /^col.*/  || TAG ~ /^colgroup.*/ || TAG ~ /^source.*/ || TAG ~ /^track.*/ || TAG ~ /^frame.*/ || TAG ~ /^param.*/ || TAG ~ /^input.*/  || TAG ~ /^option.*/ || TAG ~ /^\/option.*/ || TAG ~ /^base.*/ || TAG ~ /^!\[if.*/ || TAG ~ /^\[if.*/ ) #|| [[ $TAG = \!--\[if* ]]  #tag img jeste zapracovat, muze obsahovat cena data v popiscich
         { 
-            print "tag ignorovan"
+            #print "tag ignorovan"
             tree_val[curr_node]=tree_val[curr_node]VALUE  #toto je nove a snad to funguje spravne
             tree_val_puv_case[curr_node]=tree_val_puv_case[curr_node]VALUE_puv_case
             if ( TAG ~ /^img.*/ )
@@ -439,7 +439,7 @@ if ( is_in_comment == 0 ) #comment without tags inside them is handled above, th
         {
             if ( ! (TAG ~ /^!--.*/ ))
             {
-               print "opousti koment"
+               #print "opousti koment"
                is_in_comment=1 #false
             }   
         }    
@@ -449,7 +449,7 @@ if ( TAG ~ /^!--.*/ )
 {
         if ( ! (VALUE ~ /.*--$/))
         {
-           print "je v komentu"
+           #print "je v komentu"
            is_in_comment=0  #true
         }   
         next
@@ -463,7 +463,7 @@ if ( TAG ~ /^!\[endif\]*--$/ )
  
 if ( curr_node == -1 )
 {
-        print "Neco je spatne. Vstupni soubor je mozna poskozeny. Vice uzaviracich tagu nez oteviracich."
+        #print "Neco je spatne. Vstupni soubor je mozna poskozeny. Vice uzaviracich tagu nez oteviracich."
         #i=0
         #while [ $i -lt $last_ind ]
         #do

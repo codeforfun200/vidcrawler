@@ -214,9 +214,21 @@ domain=$(sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' <<< "$1") #reseni ze stack 
 if [[ $1 = *filesmonster.net* ]]
   then
   is_ulozto_type=0 #true
-   curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 91" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://filesmonster.net"
+   curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 91" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://filesmonster.net"
+   
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
   
-   curl -v -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 87" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "keywords=godfather" -d "c%5Busers%5D=" -d "_xfToken=1640202399%2C58f1d87d76bac8de571b67c75e92d1bb" "https://filesmonster.net/search/search"
+   curl -s -m 120 -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 87" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "keywords=godfather" -d "c%5Busers%5D=" -d "_xfToken=1640202399%2C58f1d87d76bac8de571b67c75e92d1bb" "https://filesmonster.net/search/search"
+   
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
 
   # curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
    
@@ -224,7 +236,7 @@ if [[ $1 = *filesmonster.net* ]]
 elif [[ $1 = *pornfile.cz* ]] || [[ $1 = *datoid.cz* ]]  # ve filesmonster najde spatne vysledky pro viceslovne nazvy, jsou oddeleny zvlast v tagach em
  then
  is_ulozto_type=0 #true
-   curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "https://pornfile.cz/porn-disclaimer/?back=%2F"
+   curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "https://pornfile.cz/porn-disclaimer/?back=%2F"
    
    if [ $? -ne 0 ]
          then
@@ -232,7 +244,7 @@ elif [[ $1 = *pornfile.cz* ]] || [[ $1 = *datoid.cz* ]]  # ve filesmonster najde
            exit 1
    fi  
 
-   curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
    
    if [ $? -ne 0 ]
          then
@@ -240,7 +252,7 @@ elif [[ $1 = *pornfile.cz* ]] || [[ $1 = *datoid.cz* ]]  # ve filesmonster najde
            exit 1
    fi  
    
-curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: $1" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"   
+curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: $1" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"   
   if [ $? -ne 0 ]
          then
            echo "Stranku se nepovedlo nacist"         
@@ -250,40 +262,79 @@ curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent
    then
    is_ulozto_type=0 #true
    what=$(echo "$2" | sed 's/ /+/g')
-      curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
+      curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
+      
+      if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
 
-   curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
    
-   curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/xml; charset=UTF-8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Requested-With: XMLHttpRequest" -H "Content-Length: 65" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: $domain/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -d "what=$what" -d "category=" -d "sort=" -d "offset=0" -d "limit=25" -d "wst=" "https://$domain/api/search/"  
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
+   
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/xml; charset=UTF-8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Requested-With: XMLHttpRequest" -H "Content-Length: 65" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: $domain/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -d "what=$what" -d "category=" -d "sort=" -d "offset=0" -d "limit=25" -d "wst=" "https://$domain/api/search/"  
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
  elif [[ $1 = *sdilej.cz* ]] #zatim nedokazu zpracovat parametr pozadavku GET je videt ve scriptu hlavni stranky
    then
    #exit 1
    is_ulozto_type=0 #true
-      curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"
+      curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
 
 result_url=$(cat "$vstupni_file" | grep "results\.php" | cut -d " " -f2 | cut -d "'" -f2)
 
 
-   curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://sdilej.cz$result_url"
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://sdilej.cz$result_url"
+   
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
    
  #  curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/xml; charset=UTF-8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Requested-With: XMLHttpRequest" -H "Content-Length: 65" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: $domain/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" "$1"
  elif [[ $1 = *fastshare.cz* ]]
    then
      is_ulozto_type=0 #true
-      curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"
+      curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "$1"
+      
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
 
 result_url=$(cat "$vstupni_file" | grep "test2\.php" | cut -d ":" -f2 | cut -d "," -f1 | head -1 | cut -d "=" -f6)
 search_token=$(cat "$vstupni_file" | grep "id=\"search_token" | cut -d "=" -f4 | cut -d "\"" -f2)
 
-   curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://fastshare.cz/test2.php?token=$search_token&type=all&term=$result_url&plain_search=0&limit=1&step=3"
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" "https://fastshare.cz/test2.php?token=$search_token&type=all&term=$result_url&plain_search=0&limit=1&step=3"
+   if [ $? -ne 0 ]
+         then
+           echo "curl failed            "         
+           exit 1
+   fi  
  else
-   wget  -O "$vstupni_file" "$1"
+   wget -nv --timeout=120 -O "$vstupni_file" "$1"
    if [ $? -ne 0 ]
      then
-       curl -o "$vstupni_file" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "$1"
+       curl -s -m 120 -o "$vstupni_file" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "$1"
        if [ $? -ne 0 ]
          then
-           echo "Stranku se nepovedlo nacist"         
+           echo "curl failed                "         
            exit 1
        fi  
    fi   
@@ -306,7 +357,7 @@ link_nalezen=1 #false
 
 if [ $is_ulozto_type -eq 0 ]
   then
-    cat "$vstupni_file" | iconv -f utf-8 -t ascii//TRANSLIT | awk -v "domain=$domain" -v "url=$1" -v "hledany_str=$hledany_str"  -f pornfile_parser.awk
+    cat "$vstupni_file" | iconv -f utf-8 -t ascii//TRANSLIT | awk -v "domain=$domain" -v "url=$1" -v "hledany_str=$hledany_str"  -f pornfile_parser.awk >/dev/null 2>/dev/null
   
     
 fi  

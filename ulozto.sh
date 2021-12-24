@@ -11,7 +11,7 @@ vstupni_file="azlea.html"
 if [[ $1 = *uloz.to* ]]
   then
   
-  curl -v -L -c "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: none" -H "Sec-Fetch-User: ?1" "https://uloz.to"
+  curl -m 120 -s -L -c "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: none" -H "Sec-Fetch-User: ?1" "https://uloz.to"
   
   if [ $? -ne 0 ]
     then
@@ -19,7 +19,7 @@ if [[ $1 = *uloz.to* ]]
         exit 1
   fi  
   
-   curl -v -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: https://uloz.to/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" "https://uloz.to?do=adultConfirmation-confirm"
+   curl -m 120 -s -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: https://uloz.to/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" "https://uloz.to?do=adultConfirmation-confirm"
    
   if [ $? -ne 0 ]
     then
@@ -30,7 +30,7 @@ if [[ $1 = *uloz.to* ]]
 
 # curl --http2 -v -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Referer: https://uloz.to/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -H "TE: trailers" "https://uloz.to/hledej?type=&q=the+godfather"
 
-  curl --http2 -v -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Referer: https://uloz.to/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -H "TE: trailers" "$1"
+  curl -m 120 --http2 -s -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Referer: https://uloz.to/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -H "TE: trailers" "$1"
   
   if [ $? -ne 0 ]
     then
@@ -39,7 +39,7 @@ if [[ $1 = *uloz.to* ]]
   fi  
 
   
-  curl -v -L -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: \$1" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -H "TE: trailers" "$1"  
+  curl -m 120 -s -L -b "cookies.txt" -o "$vstupni_file" -H "Host: uloz.to" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "X-Requested-With: XMLHttpRequest" -H "Connection: keep-alive" -H "Referer: \$1" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -H "TE: trailers" "$1"  
   
   if [ $? -ne 0 ]
     then
@@ -55,7 +55,7 @@ fi
 
 
 
-echo "zacatek parsingu"
+#echo "zacatek parsingu"
 
 last_ind=0
 parent_node=-1
@@ -77,7 +77,7 @@ while xmlgetnext
     VALUE_puv_case="$VALUE"
     TAG=$(echo "$TAG" | tr '[:upper:]' '[:lower:]') #should also work with locale
     VALUE=$(echo "$VALUE" | tr '[:upper:]' '[:lower:]') #should also work with locale
-    echo "value je $VALUE tag je $TAG"
+    #echo "value je $VALUE tag je $TAG"
     
     if [ $is_in_comment -eq 1 ]
     then
