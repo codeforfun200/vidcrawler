@@ -1,4 +1,4 @@
-# vidcrawler
+# Vidcrawler
 This set of bash and awk scripts called Vidcrawler is a tool for internet search for download links of movies. 
 It searches in several file sharing services which have its own finder (uloz.to, webshare.cz, datoid.cz, fastshare.cz, sdilej.cz)
 and it uses google too. It also tryes to categorize results. This tool might help to owners of copyright of movies to 
