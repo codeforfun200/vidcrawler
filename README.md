@@ -30,4 +30,14 @@ Code in current version is very repetitive and should be put in functions. This 
 in pure bash, where function calls are expensive operation and i wanted script to be faster. Unfortunatelly it still was not 
 enough so i had to rewrite it to awk. There are also other insufficiencies, theese are often caused by fact, that author
 is beginner in both bash and awk.
- 
+
+
+Results
+
+Results are shown in terminal, after script finishes. First block contains found direct download links.
+Second block contains sites with embedded player, where streaming could be possible. Third block contains
+youtube alternative sites, fourth block contains paysites, fifth block torrent sites and sixth block
+contains sites, which according to some indices may include another download links, which were not 
+identified for sure. Of course, there may be irrelevant results, relevancy depends on results of google search
+and other finders, which scripts use. Even more results, than results shown in terminal, may contain file
+download_lnks.txt, but theese are often duplicit and there may be more irrelevant results too.
