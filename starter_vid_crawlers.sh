@@ -92,8 +92,8 @@ rm "download_lnks.txt" 2>/dev/null
 echo -ne "Checking uloz.to\r"
 ./ulozto.sh "$url_for_ulozto" >/dev/null
 
-title_ascii=$(echo "$1" | iconv -f utf-8 -t ascii//TRANSLIT )
-actor_ascii=$(echo "$2" | iconv -f utf-8 -t ascii//TRANSLIT )
+title_ascii=$(echo "$1" | iconv -f utf-8 -t ascii//TRANSLIT | tr '[:upper:]' '[:lower:]')
+actor_ascii=$(echo "$2" | iconv -f utf-8 -t ascii//TRANSLIT | tr '[:upper:]' '[:lower:]')
 
 echo -ne "Checking pornfile.cz        \r"
 ./vidcrawler13.sh "$url_for_pornfile" "$title_ascii" 4 > /dev/null
