@@ -319,15 +319,15 @@ vystup_titulky="subtitle_sites.txt"
 scraper_file="for_scraper.txt"
 google_links_file="google_links.txt"
 
-rm $vystup_forum 2>/dev/null
-rm $vystup_download_lnks 2>/dev/null
-rm $vystup_youtube 2>/dev/null
-rm $vystup_player 2>/dev/null
-rm $vystup_torrent 2>/dev/null
-rm $vystup_paysite 2>/dev/null
-rm $vystup_multiple 2>/dev/null
-rm $vystup_titulky 2>/dev/null
-rm $scraper_file 2>/dev/null
+#rm $vystup_forum 2>/dev/null
+#rm $vystup_download_lnks 2>/dev/null
+#rm $vystup_youtube 2>/dev/null
+#rm $vystup_player 2>/dev/null
+#rm $vystup_torrent 2>/dev/null
+#rm $vystup_paysite 2>/dev/null
+#rm $vystup_multiple 2>/dev/null
+#rm $vystup_titulky 2>/dev/null
+#rm $scraper_file 2>/dev/null
 
 url_to_go_cnt=0
 domain="www.google.com"
@@ -362,6 +362,7 @@ if [ -e $google_links_file ]
     while read google_link
       do
         nalezl=0
+        google_link=$(echo "$google_link" | sed 's/&nbsp;/ /g; s/&amp;/\&/g; s/&lt;/\</g; s/&gt;/\>/g; s/&quot;/\"/g; s/#&#39;/\'"'"'/g; s/&ldquo;/\"/g; s/&rdquo;/\"/g;')
         add_url_to_go "$google_link"
     done < $google_links_file
 fi    
@@ -394,6 +395,63 @@ done #konec vnejsiho while
 #    fi  
 #    ((i++))
 #done  
+
+
+
+#totalne nevyzkousene, ani bing parser!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+title_ascii_plused=$(echo "$2" | sed 's/ /+/g' )
+actor_ascii_plused=$(echo "$3" | sed 's/ /+/g' )
+domain="www.bing.com"
+vstupni_file="google_pok.html"
+url_to_load="https://www.bing.com/search?q=$actor_ascii_plused+%22$title_ascii_plused%22+download"
+url_to_load_pom="https://www.bing.com/search?q=$actor_ascii_plused+%22$title_ascii_plused%22+download"
+pruchod=1
+nalezl=0
+if [ ${#url_to_go[@]} -lt 5 ] && [[ ! $1 = *site%3A* ]]
+then
+while [ $nalezl -eq 0 ]
+do
+
+ curl -m 120 -s -L -c "cookies.txt" -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Connection: keep-alive" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: none" -H "Sec-Fetch-User: ?1" "$url_to_load"
+
+#-H "Origin: https://$domain" -H "Referer: https://$domain/"
+if [ $? -ne 0 ]
+      then
+        echo "curl neuspel - pripojeni ke googlu selhalo"
+        break
+fi    
+
+#parse_to_tree
+#sleep 5 #to prevent google from knowing it is a script
+
+#hledame odkazy z google search
+rm $google_links_file 2>/dev/null
+cat $vstupni_file | awk -f bing_parser.awk > /dev/null 2>/dev/null
+
+nalezl=1 #false
+#pridat test na existenci google links file
+while read google_link
+  do
+    nalezl=0
+    add_url_to_go "$google_link"
+done < $google_links_file
+
+pom_param=$((($pruchod*10)+1))
+url_to_load="$url_to_load_pom&first=$pom_param"
+#echo "url to load je $url_to_load"
+((pruchod++))
+
+
+
+done #konec vnejsiho while
+fi
+
+
+
+
+
+
+
 
 #echo "nalezeno $cnt navigacnich odkazu"
 pom_url_cnt=0
@@ -509,6 +567,7 @@ while [ $pom_url_cnt -lt ${#url_to_go[@]} ]
       then
         while read url
           do
+            url=$(echo "$url" | sed 's/&nbsp;/ /g; s/&amp;/\&/g; s/&lt;/\</g; s/&gt;/\>/g; s/&quot;/\"/g; s/#&#39;/\'"'"'/g; s/&ldquo;/\"/g; s/&rdquo;/\"/g;')
             add_url_to_go "$url"
         done < $scraper_file  
     fi

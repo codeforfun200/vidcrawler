@@ -89,11 +89,37 @@ url_for_sdilej="$sdilej_url$title_fastshare/s"
 #echo $url_for_ulozto
 rm "download_lnks.txt" 2>/dev/null
 
+
+vystup_forum="for_analyzer.txt"
+vystup_download_lnks="for_analyzer.txt"
+vystup_youtube="youtube_alter.txt"
+vystup_player="players.txt"
+vystup_torrent="torrents.txt"
+vystup_paysite="paysites.txt"
+vystup_multiple="multiple_links.txt"
+vystup_titulky="subtitle_sites.txt"
+scraper_file="for_scraper.txt"
+google_links_file="google_links.txt"
+
+rm $vystup_forum 2>/dev/null
+rm $vystup_download_lnks 2>/dev/null
+rm $vystup_youtube 2>/dev/null
+rm $vystup_player 2>/dev/null
+rm $vystup_torrent 2>/dev/null
+rm $vystup_paysite 2>/dev/null
+rm $vystup_multiple 2>/dev/null
+rm $vystup_titulky 2>/dev/null
+rm $scraper_file 2>/dev/null
+
+
+
 echo -ne "Checking uloz.to\r"
 ./ulozto.sh "$url_for_ulozto" >/dev/null
 
 title_ascii=$(echo "$1" | iconv -f utf-8 -t ascii//TRANSLIT | tr '[:upper:]' '[:lower:]')
+title_ascii_plused=$(echo "$title_ascii" | sed 's/ /+/g' )
 actor_ascii=$(echo "$2" | iconv -f utf-8 -t ascii//TRANSLIT | tr '[:upper:]' '[:lower:]')
+actor_ascii_plused=$(echo "$actor_ascii" | sed 's/ /+/g' )
 
 echo -ne "Checking pornfile.cz        \r"
 ./vidcrawler13.sh "$url_for_pornfile" "$title_ascii" 4 > /dev/null
@@ -111,8 +137,41 @@ echo -ne "Checking sdilej.cz        \r"
 echo -ne "Checking fastshare.cz        \r"
 ./vidcrawler13.sh "$url_for_fastshare" "$title_ascii" 4 > /dev/null
 
-echo -ne "Getting urls from google        \r"
-./googlesearch4.sh "$url_for_gsearch" "$title_ascii" 
+echo -ne "Checking https://tavaz.xyz/        \r"
+./blog_crawler.sh "https://tavaz.xyz/search/?category_slug=video&query=$title_ascii_plused+$actor_ascii_plused&language=&age=&author=" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://rmz.cr/search/        \r"
+./blog_crawler.sh "https://rmz.cr/search/$title_ascii_plused" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://movieparadise.org/        \r"
+./blog_crawler.sh "https://movieparadise.org/?s=$title_ascii_plused" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://dl4all.org/        \r"
+./blog_crawler.sh "https://dl4all.org/index.php?do=search" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://filmsofts.com/        \r"
+./blog_crawler.sh "https://filmsofts.com/search.php" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://www.warez-serbia.com        \r"
+./blog_crawler.sh "https://www.warez-serbia.com" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://puzo.org        \r"
+./googlesearch4.sh "${google_url}site%3Apuzo.org+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
+
+echo -ne "Checking https://filesmonster.net        \r"
+./googlesearch4.sh "${google_url}site%3Afilesmonster.net+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
+
+echo -ne "Checking https://www.downduck.com        \r"
+./googlesearch4.sh "${google_url}site%3Awww.downduck.com+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
+
+echo -ne "Checking https://www.avaxshare.com        \r"
+./googlesearch4.sh "${google_url}site%3Awww.avaxshare.com+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null #tady by bylo lepsi reseni pres jejich advanced search, jestli to pujde
+
+
+
+echo -ne "Getting urls from google                \r"
+./googlesearch4.sh "$url_for_gsearch" "$title_ascii" "$actor_ascii"
+
 
 
 if [ -e for_analyzer.txt ]
@@ -122,7 +181,7 @@ while read url
     
     domain=$(sed -E -e 's_.*://([^/@]*@)?([^/:]+).*_\2_' <<< "$url") #reseni ze stack overflow
     echo -ne "Analyzing $domain              \r"
-    wget -nv -q --timeout=120 -O "$vstupni_file" "$url"
+    wget --header="User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -nv -q --timeout=120 -O "$vstupni_file" "$url"
     if [ $? -ne 0 ]
      then
        curl -s -m 120 -o "$vstupni_file" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "$url"

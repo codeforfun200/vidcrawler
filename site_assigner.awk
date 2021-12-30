@@ -139,6 +139,7 @@ if ( is_in_comment == 1 )
             }
             if ( TAG ~ /^meta.*/ )
             {
+               meta_array[meta_cnt]=TAG
                meta_cnt++
             }
             next
@@ -384,7 +385,7 @@ END{
     
     #zacatek hledani game site
     
-    if ( domain ~ /game/ )
+    if (( domain ~ /game/ ) || (domain ~ /gaming/))
     {
             print "nalezena gamesite "
             exit
@@ -420,6 +421,60 @@ END{
         exit
     }  
     #konec hledani paysite
+    
+    
+    #zacatek kategorizace podle meta
+    
+    
+    meta_search_for[0][0]="download"
+    meta_search_for[0][1]="movie"
+    meta_search_for_limit[0]=2
+    meta_search_for[1][0]="download"
+    #meta_search_for[1][1]=hledany_str
+    hledany_str_arr_cnt=split(hledany_str, hledany_str_arr," ")
+    pom_iter=1
+    while(pom_iter <= hledany_str_arr_cnt)
+    {
+       meta_search_for[1][pom_iter]=hledany_str_arr[pom_iter]
+       pom_iter++
+    }
+    meta_search_for_limit[1]=hledany_str_arr_cnt+1
+    pom_iter=0
+    while(pom_iter < meta_cnt)
+    {
+       pom_iter2=0
+       meta_nalezen=0
+       while(pom_iter2 < 2)
+       {
+          pom_iter3=0
+          meta_nalezen=0
+          while(pom_iter3 < meta_search_for_limit[pom_iter2])
+          {
+          
+             if(!( meta_array[pom_iter] ~ meta_search_for[pom_iter2][pom_iter3] ))
+             {
+                meta_nalezen=1 #false
+             }
+             pom_iter3++
+          }
+          if(meta_nalezen == 0) 
+          {
+             
+             break
+          }
+        
+          pom_iter2++
+       }
+       if (meta_nalezen == 0)
+       {
+         print "download site podle meta"
+         print url >> vystup_forum
+         exit
+       }
+       pom_iter++
+    }
+    
+    #konec kategorizace podle meta
     
     
     #zacatek hledani prehravace

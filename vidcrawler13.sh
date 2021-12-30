@@ -262,6 +262,8 @@ curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "Use
    then
    is_ulozto_type=0 #true
    what=$(echo "$2" | sed 's/ /+/g')
+   what_len=${#what}
+   content_length=$((44+$what_len))
       curl -s -m 120 -L -c "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: 46" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: https://$domain/" -H "Upgrade-Insecure-Requests: 1" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" -H "Sec-Fetch-Site: same-origin" -H "Sec-Fetch-User: ?1" -d "agree=Souhlas%C3%ADm" -d "_do=pornDisclaimer-submit" "$1"
       
       if [ $? -ne 0 ]
@@ -278,7 +280,7 @@ curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "Use
            exit 1
    fi  
    
-   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/xml; charset=UTF-8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Requested-With: XMLHttpRequest" -H "Content-Length: 65" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: $domain/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -d "what=$what" -d "category=" -d "sort=" -d "offset=0" -d "limit=25" -d "wst=" "https://$domain/api/search/"  
+   curl -s -m 120 -L -b "cookies.txt" -o "$vstupni_file" -H "Host: $domain" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Accept: text/xml; charset=UTF-8" -H "Accept-Language: cs,sk;q=0.8,en-US;q=0.5,en;q=0.3" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Requested-With: XMLHttpRequest" -H "Content-Length: $content_length" -H "Origin: https://$domain" -H "Connection: keep-alive" -H "Referer: $domain/" -H "Sec-Fetch-Dest: empty" -H "Sec-Fetch-Mode: cors" -H "Sec-Fetch-Site: same-origin" -d "what=$what" -d "category=" -d "sort=" -d "offset=0" -d "limit=25" -d "wst=" "https://$domain/api/search/"  
    if [ $? -ne 0 ]
          then
            echo "curl failed            "         
