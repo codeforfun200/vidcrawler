@@ -340,7 +340,7 @@ END{
              }
              pom_iter++
           }
-        }else if ((url ~ /movieparadise/)||(url ~ /dl4all.org/))
+        }else if ((url ~ /movieparadise/)||(url ~ /dl4all.org/)||(url ~ /warezlover/)||(url ~ /ulmovies/)||(url ~ /go-movie/)||(url ~ /mobilism.site/))
         { 
           pom_iter=0
           while(pom_iter < last_ind)
@@ -419,6 +419,45 @@ END{
              }
              pom_iter++
           } 
+        }else if(url ~ /3dsbs4u/)
+        {
+          pom_iter=0
+          while(pom_iter < last_ind)
+          {
+             if(tree_tag[pom_iter] ~ /^<span class=\"ntitle\"/)
+             {
+                  if (((pom_iter + 2) < last_ind)&&(tree_tag[pom_iter+2] ~ /^<b/))
+                  {
+                    print "strip rubish titulu je "strip_rubish(tree_val[pom_iter+2])
+                    print "strip rubish hledany_str je "strip_rubish(hledany_str)
+                    if(strip_rubish(tree_val[pom_iter+2]) == strip_rubish(hledany_str))
+                    {
+                       print "For url "url  >> vystupni_file #pokud mozno pridat jeste hodnotu
+                    }
+                  }
+                
+             }
+             pom_iter++
+          } 
+        }else if (url ~ /ugmovies/)
+        {
+          pom_iter=0
+          while(pom_iter < last_ind)
+          {
+             if(tree_tag[pom_iter] ~ /^<h3/)
+             {
+                if(((pom_iter + 1) < last_ind)&&(tree_tag[pom_iter+1] ~ /^<a/))
+                {
+                  print "strip rubish titulu je "strip_rubish(tree_val[pom_iter+1])
+                  print "strip rubish hledany_str je "strip_rubish(hledany_str)
+                  if(strip_rubish(tree_val[pom_iter+1]) == strip_rubish(hledany_str))
+                  {
+                     print "For url "url  >> vystupni_file #pokud mozno pridat jeste hodnotu
+                  }
+                }
+             }
+             pom_iter++
+          }
         }
         else
         {

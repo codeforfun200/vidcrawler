@@ -188,15 +188,36 @@ echo -ne "Checking https://www.warez-serbia.com        \r"
 echo -ne "Checking https://puzo.org        \r"
 ./googlesearch4.sh "${google_url}site%3Apuzo.org+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
 
+echo -ne "Checking https://warezlover.xyz        \r"
+./blog_crawler.sh "https://warezlover.xyz" "$title_ascii" >/dev/null
+
 echo -ne "Checking https://filesmonster.net        \r"
 ./googlesearch4.sh "${google_url}site%3Afilesmonster.net+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
+
+echo -ne "Checking https://3dsbs4u.com        \r"
+./blog_crawler.sh "https://3dsbs4u.com" "$title_ascii" >/dev/null
 
 echo -ne "Checking https://www.downduck.com        \r"
 ./googlesearch4.sh "${google_url}site%3Awww.downduck.com+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null
 
+
+echo -ne "Checking https://getintopc.ru        \r"
+./blog_crawler.sh "https://getintopc.ru/index.php?do=search" "$title_ascii" >/dev/null
+
 echo -ne "Checking https://www.avaxshare.com        \r"
 ./googlesearch4.sh "${google_url}site%3Awww.avaxshare.com+$actor_plused+%22$title_plused%22" "$title_ascii" "$actor_ascii" > /dev/null #tady by bylo lepsi reseni pres jejich advanced search, jestli to pujde
 
+echo -ne "Checking https://ulmovies.xyz        \r"
+./blog_crawler.sh "https://ulmovies.xyz" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://ugmovies.com        \r"
+./blog_crawler.sh "https://ugmovies.com" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://go-movie.ru        \r"
+./blog_crawler.sh "http://go-movie.ru/index.php?do=search" "$title_ascii" >/dev/null
+
+echo -ne "Checking https://mobilism.site        \r"
+./blog_crawler.sh "https://mobilism.site/index.php?do=search" "$title_ascii" >/dev/null
 
 
 echo -ne "Getting urls from google                \r"

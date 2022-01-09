@@ -108,6 +108,108 @@ elif [[ $1 = *filmsofts* ]]
         echo "curl failed"
         exit
     fi
+elif [[ $1 = *warezlover.xyz* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((43+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "story=$title_plused" -d "x=11" -d "y=10" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi    
+elif [[ $1 = *hdencode.org* ]]  
+  then
+    exit #neodesila relevantni stranku s vysledky
+    #curl -m 120 -L -o "azlea.html" -c "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" "https://hdencode.org"
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=73
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "np_asl_data=qtranslate_lang%3D0%26set_intitle%3DNone%26set_inposts%3DNone" "$1" 
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi  
+elif [[ $1 = *3dsbs4u* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((33+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "story=$title_plused" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi    
+elif [[ $1 = *softhouse.cc* ]]
+  then
+    exit #vraci html soubor plny chyb, zpracovani kvuli tomu skonci hned na zacatku
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((210+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "search_start=0" -d "full_search=1" -d "result_from=1" -d "story=$title_plused" -d "titleonly=3" -d "searchuser=" -d "replyless=0" -d "replylimit=0" -d "searchdate=0" -d "beforeafter=after" -d "sortby=date" -d "resorder=desc" -d "showposts=0" -d "catlist%5B%5D=7" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi    
+    #cat azlea.html | sed 's/<\/head>//g' > azlea2.html
+    #cat azlea2.html > azlea.html
+elif [[ $1 = *getintopc.ru* ]]
+  then
+    #neni filtrovan v parseru, musel bych zmenit funkci strip rubbish, jinak by nic nenaslo
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((210+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "search_start=0" -d "full_search=1" -d "result_from=1" -d "story=$title_plused" -d "titleonly=3" -d "searchuser=" -d "replyless=0" -d "replylimit=0" -d "searchdate=0" -d "beforeafter=after" -d "sortby=date" -d "resorder=desc" -d "showposts=0" -d "catlist%5B%5D=7" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi  
+elif [[ $1 = *ulmovies.xyz* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((41+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "story=$title_plused" -d "x=8" -d "y=8" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi     
+elif [[ $1 = *ugmovies.com* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((33+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "story=$title_plused" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi                  
+elif [[ $1 = *go-movie.ru* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((76+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "search_start=0" -d "full_search=0" -d "result_from=1" -d "story=$title_plused" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi                  
+elif [[ $1 = *mobilism.site* ]]  
+  then
+    #exit #bude nutne resit specielne
+    title_plused=$(echo "$2" | sed 's/ /+/g')
+    Content_Length=$((76+${#title_plused}))
+    curl -s -m 120 -L -o "azlea.html" -c "cookies.txt" -b "cookies.txt" -H "User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:93.0) Gecko/20100101 Firefox/93.0" -H "Content-Type: application/x-www-form-urlencoded" -H "Content-Length: $Content_Length" -d "do=search" -d "subaction=search" -d "search_start=0" -d "full_search=0" -d "result_from=1" -d "story=$title_plused" "$1"
+    if [ $? -ne 0 ]
+      then
+        echo "curl failed"
+        exit
+    fi           
     
 fi  
 
